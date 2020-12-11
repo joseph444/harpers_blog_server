@@ -21,8 +21,14 @@ mongoose.connect(config.env.DB_URL,{
 app.use(cors())
 app.use(bodyParser.json())
 
+// import the routes
+
+const UserRoutes = require("./routes/User.routes");
 
 
+//use routes
+
+app.use('/api/auth',UserRoutes);
 
 app.listen(config.env.PORT,function(){
     console.log(`Running on port ${config.env.PORT}`);

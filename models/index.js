@@ -5,3 +5,4 @@ module.exports.PoemsModel=require('./Poems.model');
 module.exports.StoriesModel=require('./Stories.model');
 module.exports.PostsModel=require('./Posts.model');
 module.exports.AlbumsModel=require('./Albums.model');
+module.exports.tokenBlacklistModel=require('./tokenBlacklist.model');

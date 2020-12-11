@@ -15,7 +15,8 @@ const OTPSchema=new mongoose.Schema({
     },
     sendAt:{
         type:Number,
-        default:new Date().getTime()
+        default:new Date().getTime(),
+        required: true
     }
 });
 module.exports=mongoose.model('OTP',OTPSchema)

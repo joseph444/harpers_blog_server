@@ -16,7 +16,7 @@ const UserSchema=new mongoose.Schema({
     },
     verfiedAt:{
         type:String,
-        required:false
+        default:""
     },
     createdAt:{
         type:String,
