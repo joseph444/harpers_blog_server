@@ -23,12 +23,13 @@ app.use(bodyParser.json())
 
 // import the routes
 
-const UserRoutes = require("./routes/User.routes");
+const Routes = require("./routes");
 
 
 //use routes
 
-app.use('/api/auth',UserRoutes);
+app.use('/api/auth',Routes.UserRoute);
+app.use('/api/profile',Routes.ProfileRoute)
 
 app.listen(config.env.PORT,function(){
     console.log(`Running on port ${config.env.PORT}`);

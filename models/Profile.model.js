@@ -11,7 +11,7 @@ const ProfileSchema=new mongoose.Schema({
     Username:{
         type:String,
         required:true,
-        unique:true
+        
     }
 });
 module.exports=mongoose.model('Profile',ProfileSchema)
