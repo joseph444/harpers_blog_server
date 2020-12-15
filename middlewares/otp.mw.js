@@ -1,9 +1,10 @@
 module.exports=async (req,res,next)=>{
     try {
         const user =await Imports.hash.getUserFromHeader(req.headers.authorization);
-        if(user.verfiedAt.trim()===""){
+        if(user.verfiedAt.trim()===""&&!user.changePassword){
             if(await Imports.user.findUserById(user._id)){
-                next()
+              return  next()
+            //  next()
             }
         }
         return res.json({

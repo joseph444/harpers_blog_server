@@ -1,4 +1,4 @@
-const Imports =  require("../imports");
+const Imports = require("../imports");
 
 module.exports=async (req,res,next)=>{
     try {
@@ -6,14 +6,9 @@ module.exports=async (req,res,next)=>{
         const auth = req.headers.authorization;
         const token = auth.split(" ")[1]
         if(await Imports.hash.checkIfTokenInBlackList(token)===false){
-            //console.log("1");
-            if(!user.changePassword){
-                if(user.verfiedAt.trim()!==""){
-                    console.log("1");
-                    if(await Imports.user.findUserById(user._id)){
-                        console.log("1");
-                       return next()
-                    }
+            if(user.changePassword){
+                if(await Imports.user.findUserById(user._id)){
+                  return  next()
                 }
             }
         }
@@ -31,6 +26,5 @@ module.exports=async (req,res,next)=>{
             errorType:"UNAUTHROZIED",
             error:"unauthorized user"
         })
-    }
-    
-    }
+    }    
+}

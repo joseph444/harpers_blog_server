@@ -29,4 +29,30 @@ router.post('/login',middlewares.guestMW,userController.login);
  */
 
 router.delete('/logout',middlewares.authMW,userController.logout);
+
+
+/**
+ * 
+ * @description forget password
+ * @path api/auth/forget_password
+ * @method GET
+ */
+
+ router.get('/forget_password',middlewares.guestMW,userController.forgetPassword);
+
+ /**
+  * 
+  * @description verify otp for forget password
+  * @path api/auth/forget_password/verify
+  * @method POST
+  */
+ router.post('/forget_password/verify',middlewares.guestMW,otpController.changePassword);
+
+ /**
+  * 
+  * @description change password using otp
+  * @path api/auth/forget_password
+  * @method POST
+  */
+ router.post('/forget_password',middlewares.changePasswordMW,userController.changePasswordUsingOtp);
 module.exports=router

@@ -115,6 +115,82 @@ module.exports={
             })
         }
     },
+
+    forgetPassword: async (req,res)=>{
+        try {
+            var email = req.body.email;
+            if(!email){
+                return res.json({
+                    status:false,
+                    message:"Email field is required",
+                    errorType:"VALIDATION",
+                    error:["validation error"]
+                });
+            }else if(!/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)){
+                return res.json({
+                    status:false,
+                    message:"Email field is invalid",
+                    errorType:"VALIDATION",
+                    error:["validation error"]
+                });
+            }
+
+            res.json({
+                status:true,
+                message:"OTP send if user exists",
+            });
+
+
+          if(await Imports.user.findUserByEmail(email)){
+              const user=await Imports.user.findUserByEmail(email)
+              OTPControllers.createOTP(user._id,user.email);
+          }
+        } catch (error) {
+            console.log(error);
+            return res.json({
+                status:false,
+                message:"Some Error Occured",
+                errorType:"SYSTEM",
+                error:[error]
+            })
+        }
+    },
+
+    changePasswordUsingOtp:async function(req,res){
+        try {
+            const error = await __validateChangePasswordUsingOtp(req.body);
+            if(error){
+                return res.json({
+                    status:false,
+                    message:errors,
+                    errorType:"VALIDATION",
+                    error:"Validation error"
+                });
+            }
+            const user =await Imports.hash.getUserFromHeader(req.headers.authorization);
+            
+            const User = await Imports.user.findUserById(user._id);
+            User.pasword = Imports.hash.hashPassword(req.body.password);
+            await User.save();
+
+            var token = authorization.split(" ")[1];
+            await Imports.hash.addTokenToBlackList(token);
+
+            return res.json({
+                status:true,
+                message:"Password Changed"
+            })
+
+        } catch (error) {
+            console.log(error);
+            return res.json({
+                status:false,
+                message:"Some Error Occured",
+                errorType:"SYSTEM",
+                error:[error]
+            })
+        }
+    }
     
     
 }
@@ -194,5 +270,18 @@ const _validateLogin = async (body)=>{
     }
     if(!await Imports.user.findUserByEmail(email)){
         return "User Doesn't Exists"
+    }
+}
+
+const __validateChangePasswordUsingOtp = async function(body){
+    if(!password){
+        return "Password field is required";
+    }
+
+    if(password.length<8){
+        return "Password must be more than 8 characters long"
+    }
+    if(confirmPassword!==password){
+        return "Confirm password field should be same as Password field"
     }
 }

@@ -94,5 +94,68 @@ module.exports={
             })
         }
 
+    },
+
+    changePassword:async (req,res)=>{
+        try {
+            const otp = req.body.number;
+            //console.log(req.headers);
+            const user = await Imports.hash.getUserFromHeader(req.headers.authorization);
+
+            const verifyOtp = await OTPModel.findOne({
+                'userId':user._id,
+                'number':otp,
+                //'used':false
+            });
+            
+            if(verifyOtp){
+                let verifedAt = new Date().toUTCString();
+                await OTPModel.findOneAndUpdate({
+                    number:otp,
+                    userId:user._id
+                },{
+                    $set:{
+                        userId:user._id,
+                        number:otp,
+                        used:true,
+                      //  verifiedAt: new Date().toUTCString()
+                    }
+                },{upsert:true});
+    
+                const User = await UserModel.findOne({'_id':user._id});
+                
+                
+                const Payload = User.toObject();
+                var tokenResponse
+                try {
+                    Payload.changePassword = true;
+                    //await OTPControllers.createOTP(newUser._id,req.body.email);
+                    tokenResponse  =await Imports.hash.createToken(Payload);
+                } catch (error) {
+                    //await User.delete();
+                    throw error
+                }
+    
+                res.json({
+                    status:true,
+                    ...tokenResponse
+                });
+                }else{
+                    res.json({
+                        status:false,
+                        message:"invalid OTP",
+                        errorType:"AUTH",
+                        error:"invalid OTP"
+                    })
+                }
+        } catch (error) {
+            console.log(error);
+            res.json({
+                status:false,
+                message:"Some Error Occured",
+                errorType:"SYS",
+                error:[error]
+            })
+        }
     }
 }
