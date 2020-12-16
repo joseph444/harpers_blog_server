@@ -3,6 +3,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const config = require("./config");
+const Middlewares = require("./middlewares");
 
 const app = express();
 
@@ -30,6 +31,10 @@ const Routes = require("./routes");
 
 app.use('/api/auth',Routes.UserRoute);
 app.use('/api/profile',Routes.ProfileRoute)
+app.use('/api/poem',Routes.PoemRoute);
+app.use('/api/story',Routes.StoryRoute);
+app.use('/api/post',Routes.PostRoute);
+app.use('/api/album',Routes.AlbumRoute);
 
 app.listen(config.env.PORT,function(){
     console.log(`Running on port ${config.env.PORT}`);
