@@ -34,6 +34,35 @@ module.exports={
                 error:[error]
             })
         }
+    },
+    getprofile:async (req,res)=>{
+        try {
+            const errors = await __validate(req.body);
+            const user =await Imports.hash.getUserFromHeader(req.headers.authorization);
+            var profile =await ProfileModel.findOne({userId:user._id});
+            if(!profile){
+                profile = ProfileModel.create({
+                    userId:user._id,
+                    Username:user.name,
+                    profilePicUrl:"https://ik.imagekit.io/visceailxwt/thumb_15951118880user_7xErhshoL.webp"
+                });
+                await profile.save();
+            }
+            
+
+            return res.json({
+                status:true,
+                ...profile.toObject()
+            })
+        } catch (error) {
+            console.log(error);
+            return res.json({
+                status:false,
+                message:"Some Error Occured",
+                errorType:"SYSTEM",
+                error:[error]
+            })
+        }
     }
 }
 
