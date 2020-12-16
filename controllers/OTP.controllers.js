@@ -100,29 +100,30 @@ module.exports={
         try {
             const otp = req.body.number;
             //console.log(req.headers);
-            const user = await Imports.hash.getUserFromHeader(req.headers.authorization);
+           // const user = await Imports.hash.getUserFromHeader(req.headers.authorization);
 
             const verifyOtp = await OTPModel.findOne({
-                'userId':user._id,
+                'used':false,
                 'number':otp,
                 //'used':false
             });
             
             if(verifyOtp){
+                
                 let verifedAt = new Date().toUTCString();
                 await OTPModel.findOneAndUpdate({
                     number:otp,
-                    userId:user._id
+                    userId:verifyOtp.userId
                 },{
                     $set:{
-                        userId:user._id,
+                        userId:verifyOtp.userId,
                         number:otp,
                         used:true,
                       //  verifiedAt: new Date().toUTCString()
                     }
-                },{upsert:true});
+                },{upsert:false});
     
-                const User = await UserModel.findOne({'_id':user._id});
+                const User = await UserModel.findOne({'_id':verifyOtp.userId});
                 
                 
                 const Payload = User.toObject();

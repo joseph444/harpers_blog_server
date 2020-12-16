@@ -170,10 +170,10 @@ module.exports={
             const user =await Imports.hash.getUserFromHeader(req.headers.authorization);
             
             const User = await Imports.user.findUserById(user._id);
-            User.pasword = Imports.hash.hashPassword(req.body.password);
+            User.password = Imports.hash.hashPassword(req.body.password);
             await User.save();
 
-            var token = authorization.split(" ")[1];
+            var token = req.headers.authorization.split(" ")[1];
             await Imports.hash.addTokenToBlackList(token);
 
             return res.json({
@@ -274,6 +274,8 @@ const _validateLogin = async (body)=>{
 }
 
 const __validateChangePasswordUsingOtp = async function(body){
+    const password = body.password;
+    const confirmPassword = body.confirmPassword;
     if(!password){
         return "Password field is required";
     }
