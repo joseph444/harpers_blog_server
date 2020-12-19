@@ -1,4 +1,5 @@
 const mongoose=require('mongoose');    
+const { number } = require('yargs');
 const PoemsSchema=new mongoose.Schema({
 	userId:{
         type:String,
@@ -30,8 +31,12 @@ const PoemsSchema=new mongoose.Schema({
     createdAt:{
         type:String,
         default:new Date().toUTCString()
-    }
+    },
 
+    created_at:{
+        type:Number,
+        default: new Date()
+    }
 
 });
     
