@@ -42,4 +42,13 @@ const Middlewares = require("../middlewares");
 
    router.get("/:id",Controllers.PostController.getAPost);
 
+     /**
+    * 
+    * @description This is another restricted path from where we can edit a post
+    * @path api/post/:id
+    * @method PUT
+    */
+
+   router.put("/:id",Middlewares.authMW,Controllers.PostController.editPost);
+
 module.exports=router

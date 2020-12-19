@@ -9,6 +9,17 @@ const StoriesSchema=new mongoose.Schema({
         type:String,
         required:false,
     },
+    title:{
+        type:String,
+        default:"Untitled"
+    },
+    completed:{
+        type:Boolean,
+        default:false
+    },
+    authorName:{
+        type:String
+    },
     pages:{
         type:Array,
         required:true,
