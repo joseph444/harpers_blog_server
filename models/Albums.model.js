@@ -7,6 +7,14 @@ const AlbumsSchema=new mongoose.Schema({
     authorName:{
         type:String
     },
+    coverImageUrl:{
+        type:String,
+        required:false
+    },
+    title:{
+        type:String,
+        default:"Untitled"
+    },
     createdAt:{
         type:String,
         default:new Date().toUTCString()
