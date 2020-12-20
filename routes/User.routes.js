@@ -55,4 +55,12 @@ router.delete('/logout',middlewares.authMW,userController.logout);
   * @method POST
   */
  router.post('/forget_password',middlewares.changePasswordMW,userController.changePasswordUsingOtp);
+
+ /**
+  * 
+  * @description change password using old password
+  * @path api/auth/change_password
+  * @method POST
+  */
+ router.post("/change_password",middlewares.authMW,userController.changePassword);
 module.exports=router

@@ -1,5 +1,7 @@
 const userModel = require("../models").UserModel
+
 const Imports = require("../imports");
+const UserModel = require("../models/User.model");
 const OTPControllers = require("./OTP.controllers");
 module.exports={
     register:async (req,res)=>{
@@ -190,6 +192,53 @@ module.exports={
                 error:[error]
             })
         }
+    },
+
+    changePassword:async (req,res)=>{
+        const errors = await __validateChangePassword(req.body);
+        if(errors){
+            return res.json({
+                status:false,
+                message:errors,
+                errorType:"VALIDATION",
+                error:[
+                    errors
+                ]
+            })
+        }
+        try {
+            const user =await Imports.hash.getUserFromHeader(req.headers.authorization);
+            const userId = user._id;
+
+            const User = await UserModel.findById(userId);
+
+            if(!await Imports.hash.verifyPassword(User.password,req.body.oldPassword)){
+                return res.json({
+                    status:false,
+                    message:"Old Password didn't matched",
+                    errorType:"VALIDATION",
+                    error:[
+                        "old password didn't matched"
+                    ]
+                });
+            }
+
+            User.password = Imports.hash.hashPassword(req.body.newPassword);
+            await User.save();
+            
+            return res.json({
+                status:true,
+                message:"Password is changed"
+            })
+        } catch (error) {
+            console.log(error);
+            return res.json({
+                status:false,
+                message:"Some Error Occured",
+                errorType:"SYSTEM",
+                error:[error]
+            })
+        }
     }
     
     
@@ -285,5 +334,27 @@ const __validateChangePasswordUsingOtp = async function(body){
     }
     if(confirmPassword!==password){
         return "Confirm password field should be same as Password field"
+    }
+}
+
+const __validateChangePassword = async function(body){
+    const oldPassword = body.oldPassword;
+    const newPassword = body.newPassword;
+    const confirmPassword = body.confirmPassword;
+
+    if(!oldPassword){
+        return "Old Password is required";
+    }
+    if(oldPassword.length<1){
+        return "Old Password can't be blank";
+    }
+    if(!newPassword){
+        return "New password is required";
+    }
+    if(newPassword.length<8){
+        return "New password should be 8 characters long ."
+    }
+    if(confirmPassword!==newPassword){
+        return "Password didn't matched";
     }
 }
