@@ -38,11 +38,11 @@ app.use('/api/post',Routes.PostRoute);
 app.use('/api/album',Routes.AlbumRoute);
 
 try {
-    var http = require('http'),https= require('https');
-    http.createServer(app).listen(5000);
-    /*app.listen(config.env.PORT,function(){
+    //var http = require('http'),https= require('https');
+  //  http.createServer(app).listen(5000);
+    app.listen(config.env.PORT,function(){
         console.log(`Running on port ${config.env.PORT}`);
-    })*/
+    })
 } catch (error) {
     console.log("Error at listen method");
     console.log(error);
