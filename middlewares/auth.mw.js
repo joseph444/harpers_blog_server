@@ -8,7 +8,8 @@ module.exports=async (req,res,next)=>{
         if(await Imports.hash.checkIfTokenInBlackList(token)===false){
             //console.log("1");
             if(!user.changePassword){
-                if(user.verfiedAt.trim()!==""){
+                console.log(1);
+                if(user.verfiedAt.trim()!==""||1){
                     console.log("1");
                     if(await Imports.user.findUserById(user._id)){
                         console.log("1");

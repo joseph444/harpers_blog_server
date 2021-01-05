@@ -13,6 +13,7 @@ mongoose.connect(config.env.DB_URL,{
 })
                     .then(res=>console.log("DataBase Connected"))
                     .catch(err=>{
+                        console.log("Error at connect method");
                         console.log(err);
                         process.exit(-1)
                     })
@@ -36,7 +37,14 @@ app.use('/api/story',Routes.StoryRoute);
 app.use('/api/post',Routes.PostRoute);
 app.use('/api/album',Routes.AlbumRoute);
 
-app.listen(config.env.PORT,function(){
-    console.log(`Running on port ${config.env.PORT}`);
-})
+try {
+    var http = require('http'),https= require('https');
+    http.createServer(app).listen(5000);
+    /*app.listen(config.env.PORT,function(){
+        console.log(`Running on port ${config.env.PORT}`);
+    })*/
+} catch (error) {
+    console.log("Error at listen method");
+    console.log(error);
+}
 

@@ -46,7 +46,7 @@ module.exports={
                     Username:user.name,
                     profilePicUrl:"https://ik.imagekit.io/visceailxwt/thumb_15951118880user_7xErhshoL.webp"
                 });
-                await profile.save();
+               // await profile.save();
             }
             
 

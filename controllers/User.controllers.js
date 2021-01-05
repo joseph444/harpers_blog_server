@@ -27,7 +27,7 @@ module.exports={
             const Payload = newUser.toObject()
             var tokenResponse={};
             try {
-                await OTPControllers.createOTP(newUser._id,req.body.email);
+                //await OTPControllers.createOTP(newUser._id,req.body.email);
                 tokenResponse  =await Imports.hash.createToken(Payload,108000);
             } catch (error) {
                 await newUser.delete();
